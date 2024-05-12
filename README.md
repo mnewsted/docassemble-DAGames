@@ -4,5 +4,5 @@ A docassemble extension.
 
 ## Author
 
-Matt Newsted, mnewsted@illinoislegalaid.org
+Matt Newsted, matthew.newsted@gmail.com
 

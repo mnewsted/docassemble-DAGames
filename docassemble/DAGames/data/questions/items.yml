@@ -1,0 +1,13 @@
+---
+mandatory: True
+code: |
+  items[0].name = "boulder"
+  items[0].desc = "A massive rock makes moving through the cave difficult."
+  items[0].room = 0
+  items[0].moveable = False
+
+  items[1].name = "seashell"
+  items[1].desc = "This milky-toned object somehow endured the elements."
+  items[1].room = 1
+  items[1].moveable = True
+---

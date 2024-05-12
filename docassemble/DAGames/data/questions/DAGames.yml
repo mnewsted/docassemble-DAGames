@@ -11,13 +11,16 @@ features:
 ---
 include:
   - rooms.yml
+  - items.yml
 ---
 modules:
   - .rooms
+  - .items
   - docassemble.ALToolbox.misc
 ---
 objects:
   rooms: Room
+  items: Item
 ---
 mandatory: True
 code: |
@@ -78,6 +81,8 @@ subquestion: |
   ${ rooms[location].desc }
   
   Visible exits: ${ comma_and_list( rooms.visible_exits(location) ) }
+
+#  Things you see: ${ comma_and_list( items.visible_items(location) ) }
 fields:
   - What do you want to do?: get_command
     label above field: True

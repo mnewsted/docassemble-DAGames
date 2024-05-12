@@ -44,9 +44,9 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
     return out
 
 setup(name='docassemble.DAGames',
-      version='0.0.1',
+      version='0.0.2',
       description=('A docassemble extension.'),
-      long_description='# docassemble.DAGames\n\nA docassemble extension.\n\n## Author\n\nMatt Newsted, mnewsted@illinoislegalaid.org\n\n',
+      long_description='# docassemble.DAGames\r\n\r\nA docassemble extension.\r\n\r\n## Author\r\n\r\nMatt Newsted, matthew.newsted@gmail.com\r\n\r\n',
       long_description_content_type='text/markdown',
       author='Matt Newsted',
       author_email='matthew.newsted@gmail.com',
