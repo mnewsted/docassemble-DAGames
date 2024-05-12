@@ -1,5 +1,6 @@
 from docassemble.base.util import (
-    DAList
+    DAList,
+    Thing
     )
 
 
@@ -7,12 +8,12 @@ class ItemList(DAList):
   
   def init(self, *pargs, **kwargs):
     super().init(*pargs, **kwargs)
-    self.object_type = DAList
+    self.object_type = Thing
 
   def visible_items(self, location):
     visible_things = []
     for item in self:
       if item.room == location:
-        visible_things.append(item.name)
+        visible_things.append(item.name.text)
     return visible_things
     

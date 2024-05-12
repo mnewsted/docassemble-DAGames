@@ -76,13 +76,13 @@ buttons:
 ---
 id: command screen
 question: |
-  ${ rooms[location].name }
+  ${ rooms[location].name.text }
 subquestion: |
   ${ rooms[location].desc }
   
   Visible exits: ${ comma_and_list( rooms.visible_exits(location) ) }
 
-#  Things you see: ${ comma_and_list( items.visible_items(location) ) }
+  Things you see: ${ comma_and_list( items.visible_items(location) ) }
 fields:
   - What do you want to do?: get_command
     label above field: True

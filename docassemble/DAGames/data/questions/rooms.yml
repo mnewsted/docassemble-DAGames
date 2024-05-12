@@ -13,4 +13,6 @@ code: |
   rooms[1].name = "The beach"
   rooms[1].desc = "You're on a sandy beach. The sun reflects off the gentle waves. To the south is an entrance to a cave. To the east is sweet freedom."
   rooms[1].exits = { "s": 0, "e": 999 }
+  
+  rooms.gathered = True
 ---

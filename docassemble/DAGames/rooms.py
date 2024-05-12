@@ -1,5 +1,6 @@
 from docassemble.base.util import (
-    DAList
+    DAList,
+    Thing
     )
 
 
@@ -7,7 +8,7 @@ class RoomList(DAList):
   
   def init(self, *pargs, **kwargs):
     super().init(*pargs, **kwargs)
-    self.object_type = DAList
+    self.object_type = Thing
 
   def is_valid_exit(self, location, direction):
     if direction in self[location].exits:
