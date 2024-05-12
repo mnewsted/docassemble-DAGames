@@ -1,0 +1,103 @@
+metadata:
+  title: DAGames
+  short title: DAGames
+  comment: This program is an attempt to make a text adventure in Docassemble.
+  authors:
+    - Matt Newsted
+---
+features:
+  navigation back button: False
+  question back button: False
+---
+include:
+  - rooms.yml
+---
+modules:
+  - .rooms
+  - docassemble.ALToolbox.misc
+---
+objects:
+  rooms: Room
+---
+mandatory: True
+code: |
+  start_screen
+  while location != 999:
+    results
+    undefine('get_command', 'command', 'results')
+  end_screen
+---
+sets: results
+code: |
+  get_command
+  command = get_command.lower()
+
+  if command == "exit":
+    exit_screen
+  command = short_direction(command)
+  if rooms.is_valid_exit(location, command):
+    new_location = rooms[location].exits[command]
+    location = new_location
+  else:
+    no_exit
+    undefine('no_exit')
+  results = True
+---
+code: |
+  valid_commands = [ 'exit', 'north', 'n', 'south', 's', 'east', 'e', 'west', 'w', 'up', 'u', 'down', 'd', 'northwest', 'nw', 'northeast', 'ne', 'southwest', 'sw', 'southeast', 'se' ]
+---
+id: start
+continue button field: start_screen
+question: |
+  Start
+---
+id: end screen
+event: end_screen
+question: |
+  The end
+subquestion: |
+  You made it to the end.
+  
+  Thanks for playing!
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+id: exit screen
+event: exit_screen
+question: |
+  Thanks for playing!
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+id: command screen
+question: |
+  ${ rooms[location].name }
+subquestion: |
+  ${ rooms[location].desc }
+  
+  Visible exits: ${ comma_and_list( rooms.visible_exits(location) ) }
+fields:
+  - What do you want to do?: get_command
+    label above field: True
+under: |
+  ${ collapse_template(valid_commands_help)}
+validation code: |
+  if not (str(get_command).lower() in valid_commands):
+    validation_error("Command not recognized. Try again.", field='get_command')
+---
+template: valid_commands_help
+subject: |
+  **List of valid commands**
+content: |
+  Valid commands: ${ comma_list(valid_commands) }
+---
+id: invalid move
+continue button field: no_exit
+question: |
+  You can't go ${ full_direction(command) }
+subquestion: |
+  ${ rooms[location].desc }
+  
+  Visible exits: **${ comma_and_list( rooms.visible_exits(location) ) }**

@@ -1,0 +1,16 @@
+---
+mandatory: True
+code: |
+  # starting location
+  location = 0
+---
+mandatory: True
+code: |
+  rooms[0].name = "The cave"
+  rooms[0].desc = "You're in a dark cavern. Cool, damp air hangs around you. To the north you see daylight."
+  rooms[0].exits = { "n": 1 }
+
+  rooms[1].name = "The beach"
+  rooms[1].desc = "You're on a sandy beach. The sun reflects off the gentle waves. To the south is an entrance to a cave. To the east is sweet freedom."
+  rooms[1].exits = { "s": 0, "e": 999 }
+---
