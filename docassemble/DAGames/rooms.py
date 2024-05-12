@@ -3,7 +3,7 @@ from docassemble.base.util import (
     )
 
 
-class Room(DAList):
+class RoomList(DAList):
   
   def init(self, *pargs, **kwargs):
     super().init(*pargs, **kwargs)

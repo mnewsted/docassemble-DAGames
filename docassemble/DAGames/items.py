@@ -3,7 +3,7 @@ from docassemble.base.util import (
     )
 
 
-class Item(DAList):
+class ItemList(DAList):
   
   def init(self, *pargs, **kwargs):
     super().init(*pargs, **kwargs)

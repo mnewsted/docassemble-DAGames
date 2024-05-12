@@ -19,8 +19,8 @@ modules:
   - docassemble.ALToolbox.misc
 ---
 objects:
-  rooms: Room
-  items: Item
+  rooms: RoomList
+  items: ItemList
 ---
 mandatory: True
 code: |
