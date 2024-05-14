@@ -27,13 +27,13 @@ code: |
   start_screen
   while location != 999:
     results
-    undefine('get_command', 'command', 'results')
+    undefine('input_string', 'command', 'results')
   end_screen
 ---
 sets: results
 code: |
-  get_command
-  command = get_command.lower()
+  input_string
+  command = input_string.lower()
 
   if command == "exit":
     exit_screen
@@ -84,12 +84,15 @@ subquestion: |
 
   Things you see: ${ comma_and_list( items.visible_items(location) ) }
 fields:
-  - What do you want to do?: get_command
+  - What do you want to do?: input_string
     label above field: True
 under: |
+  ${ collapse_template(inventory_help)}
+  [NEWLINE]
   ${ collapse_template(valid_commands_help)}
+
 validation code: |
-  if not (str(get_command).lower() in valid_commands):
+  if not (str(input_string).lower() in valid_commands):
     validation_error("Command not recognized. Try again.", field='get_command')
 ---
 template: valid_commands_help
@@ -97,6 +100,16 @@ subject: |
   **List of valid commands**
 content: |
   Valid commands: ${ comma_list(valid_commands) }
+---
+template: inventory_help
+subject: |
+  **Inventory**
+content: |
+  % if len(items.inventory()) == 0:
+    You got nothing.
+  % else:
+    You are carrying: ${ comma_and_list(items.inventory()) }
+  % endif
 ---
 id: invalid move
 continue button field: no_exit

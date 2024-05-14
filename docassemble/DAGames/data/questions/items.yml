@@ -11,5 +11,11 @@ code: |
   items[1].room = 1
   items[1].moveable = True
   
+  items[2].name.text = "rabbit's foot"
+  items[2].desc = "This severed appendage has been dried and dyed deep blue. Lucky for you, not so for the rabbit."
+  items[2].room = 999
+  items[2].moveable = True
+  
+  
   items.gathered = True
 ---
