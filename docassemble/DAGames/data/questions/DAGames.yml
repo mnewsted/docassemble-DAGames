@@ -14,6 +14,7 @@ include:
   - items.yml
 ---
 modules:
+  - .base
   - .rooms
   - .items
   - docassemble.ALToolbox.misc
@@ -21,33 +22,54 @@ modules:
 objects:
   rooms: RoomList
   items: ItemList
+  items_in_list: DAList.using(object_type=Thing, there_are_any=True)
 ---
 mandatory: True
 code: |
   start_screen
   while location != 999:
     results
-    undefine('input_string', 'command', 'results')
+    undefine('input_string', 'command', 'target', 'results', 'examine_item', 'item_not_visible')
   end_screen
 ---
 sets: results
 code: |
   input_string
-  command = input_string.lower()
+  command = get_command(input_string)
+  target = get_target(input_string)
 
+  # exit
   if command == "exit":
     exit_screen
-  command = short_direction(command)
-  if rooms.is_valid_exit(location, command):
-    new_location = rooms[location].exits[command]
-    location = new_location
-  else:
-    no_exit
-    undefine('no_exit')
+    
+  # examine
+  if command == "x" or command == "examine":
+    if target == '':
+      pick_item_to_examine
+      debug_screen
+      #pass # add code to get new target string "what do you want to examine?"
+    if target in items.usable_items(location):
+      examine_item
+    else:
+      item_not_visible
+        
+  # move
+  if command in valid_moves:
+    command = short_direction(command)
+    if rooms.is_valid_exit(location, command):
+      new_location = rooms[location].exits[command]
+      location = new_location
+    else:
+      no_exit
+      undefine('no_exit')
+        
   results = True
+  
 ---
 code: |
-  valid_commands = [ 'exit', 'north', 'n', 'south', 's', 'east', 'e', 'west', 'w', 'up', 'u', 'down', 'd', 'northwest', 'nw', 'northeast', 'ne', 'southwest', 'sw', 'southeast', 'se' ]
+  valid_moves = [ 'north', 'n', 'south', 's', 'east', 'e', 'west', 'w', 'up', 'u', 'down', 'd', 'northwest', 'nw', 'northeast', 'ne', 'southwest', 'sw', 'southeast', 'se' ]
+
+  valid_commands = valid_moves + [ 'examine', 'x', 'exit' ]
 ---
 id: start
 continue button field: start_screen
@@ -92,8 +114,8 @@ under: |
   ${ collapse_template(valid_commands_help)}
 
 validation code: |
-  if not (str(input_string).lower() in valid_commands):
-    validation_error("Command not recognized. Try again.", field='get_command')
+  if not (get_command(input_string) in valid_commands):
+    validation_error("Command not recognized. Try again.", field='input_string')
 ---
 template: valid_commands_help
 subject: |
@@ -119,3 +141,42 @@ subquestion: |
   ${ rooms[location].desc }
   
   Visible exits: **${ comma_and_list( rooms.visible_exits(location) ) }**
+---
+id: examine item
+continue button field: examine_item
+question: |
+  Examine ${ target }
+subquestion: |
+  ${ items.get_description(target) }
+---
+id: item not visible
+continue button field: item_not_visible
+question: |
+  Can't examine
+subquestion: |
+  You don't see ${ indefinite_article(target) }.
+---
+id: which item to examine
+continue button field: pick_item_to_examine
+question: |
+  What do you want to examine?
+subquestion: |
+  This is busted.
+fields:
+  - no label: items_in_list
+    input type: radio
+    code: items.list_as_fields(location)
+    #code: usable_item_list
+---
+id: debug
+continue button field: debug_screen
+question: |
+  Debug
+subquestion: |
+  Check out those vars
+---
+# using .list_as_fields() instead
+code: |
+  usable_item_list = list()
+  for item in items.usable_items(location):
+    usable_item_list.append( {"label": (str(item)).capitalize(), "field": item } )

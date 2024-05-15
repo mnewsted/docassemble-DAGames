@@ -28,4 +28,17 @@ class ItemList(DAList):
     usable_things = []
     usable_things = self.inventory() + self.visible_items(location)
     return usable_things
-    
+
+  def get_description(self, thing):
+    for item in self:
+      if item.name.text == thing:
+        return item.desc
+    return "Something's wrong..."
+  
+  def list_as_fields(self, location):
+    things_in_fields = list()
+    for item in self.usable_items(location):
+      things_in_fields.append( {"label": str(item).capitalize(), "field": item } )
+    return things_in_fields
+
+  
