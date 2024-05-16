@@ -29,7 +29,8 @@ code: |
   start_screen
   while location != 999:
     results
-    undefine('input_string', 'command', 'target', 'results', 'examine_item', 'item_not_visible')
+    # when finished put this undefine into a function maybe reset_command
+    undefine('input_string', 'command', 'target', 'results', 'pick_item_to_examine', 'item_to_examine', 'examine_item', 'item_not_visible')
   end_screen
 ---
 sets: results
@@ -46,13 +47,22 @@ code: |
   if command == "x" or command == "examine":
     if target == '':
       pick_item_to_examine
-      debug_screen
-      #pass # add code to get new target string "what do you want to examine?"
+      target = item_to_examine
     if target in items.usable_items(location):
       examine_item
     else:
       item_not_visible
-        
+    
+  # take
+  if command == "t" or command == "take":
+    if target == '':
+      pick_item_to_take
+      target = item_to_take
+    if target in items.usable_items(location):
+      take_item
+    else:
+      item_not_takeable
+      
   # move
   if command in valid_moves:
     command = short_direction(command)
@@ -69,7 +79,7 @@ code: |
 code: |
   valid_moves = [ 'north', 'n', 'south', 's', 'east', 'e', 'west', 'w', 'up', 'u', 'down', 'd', 'northwest', 'nw', 'northeast', 'ne', 'southwest', 'sw', 'southeast', 'se' ]
 
-  valid_commands = valid_moves + [ 'examine', 'x', 'exit' ]
+  valid_commands = valid_moves + [ 'examine', 'x', 'take', 't', 'exit' ]
 ---
 id: start
 continue button field: start_screen
@@ -161,12 +171,11 @@ continue button field: pick_item_to_examine
 question: |
   What do you want to examine?
 subquestion: |
-  This is busted.
+  You can examine things you can see or things you are carrying.
 fields:
-  - no label: items_in_list
+  - no label: item_to_examine
     input type: radio
     code: items.list_as_fields(location)
-    #code: usable_item_list
 ---
 id: debug
 continue button field: debug_screen
@@ -177,6 +186,7 @@ subquestion: |
 ---
 # using .list_as_fields() instead
 code: |
-  usable_item_list = list()
+  usable_item_list = []
   for item in items.usable_items(location):
-    usable_item_list.append( {"label": (str(item)).capitalize(), "field": item } )
+    usable_item_list.append( { item: item.capitalize()  } )
+    #usable_item_list.append( {"label": (str(item)).capitalize(), "field": item } )

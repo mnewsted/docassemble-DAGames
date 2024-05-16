@@ -38,7 +38,7 @@ class ItemList(DAList):
   def list_as_fields(self, location):
     things_in_fields = list()
     for item in self.usable_items(location):
-      things_in_fields.append( {"label": str(item).capitalize(), "field": item } )
+      things_in_fields.append( { item: item.capitalize() } )
     return things_in_fields
 
   
