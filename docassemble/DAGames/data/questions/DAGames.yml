@@ -30,7 +30,7 @@ code: |
   while location != 999:
     results
     # when finished put this undefine into a function maybe reset_command
-    undefine('input_string', 'command', 'target', 'results', 'pick_item_to_examine', 'item_to_examine', 'examine_item', 'item_not_visible')
+    undefine('input_string', 'command', 'target', 'results', 'pick_item_to_examine', 'item_to_examine', 'examine_item', 'item_not_visible', 'pick_item_to_take', 'item_to_take', 'take_item', 'item_not_takeable' )
   end_screen
 ---
 sets: results
@@ -51,7 +51,10 @@ code: |
     if target in items.usable_items(location):
       examine_item
     else:
-      item_not_visible
+      if target == "cancel":
+        pass
+      else:
+        item_not_visible
     
   # take
   if command == "t" or command == "take":
@@ -59,9 +62,16 @@ code: |
       pick_item_to_take
       target = item_to_take
     if target in items.usable_items(location):
-      take_item
+      if items.is_moveable(target):
+        items.add_to_inventory(target)
+        take_item
+      else:
+        item_not_takeable
     else:
-      item_not_takeable
+      if target == "cancel":
+        pass
+      else:
+        item_not_visible
       
   # move
   if command in valid_moves:
@@ -114,7 +124,11 @@ subquestion: |
   
   Visible exits: ${ comma_and_list( rooms.visible_exits(location) ) }
 
+  % if len(items.visible_items(location)) > 0:
   Things you see: ${ comma_and_list( items.visible_items(location) ) }
+  % else:
+  You don't see anything special.
+  % endif
 fields:
   - What do you want to do?: input_string
     label above field: True
@@ -162,7 +176,7 @@ subquestion: |
 id: item not visible
 continue button field: item_not_visible
 question: |
-  Can't examine
+  Can't do that
 subquestion: |
   You don't see ${ indefinite_article(target) }.
 ---
@@ -175,7 +189,32 @@ subquestion: |
 fields:
   - no label: item_to_examine
     input type: radio
-    code: items.list_as_fields(location)
+    code: items.list_usable_as_fields(location)
+---
+id: take item
+continue button field: take_item
+question: |
+  Take ${ target }
+subquestion: |
+  You take the ${ target }.
+---
+id: item not moveable
+continue button field: item_not_takeable
+question: |
+  Can't take
+subquestion: |
+  You can't take ${ indefinite_article(target) }.
+---
+id: which item to take
+continue button field: pick_item_to_take
+question: |
+  What do you want to take?
+subquestion: |
+  You can take things you can see.
+fields:
+  - no label: item_to_take
+    input type: radio
+    code: items.list_visible_as_fields(location)
 ---
 id: debug
 continue button field: debug_screen
@@ -183,10 +222,4 @@ question: |
   Debug
 subquestion: |
   Check out those vars
----
-# using .list_as_fields() instead
-code: |
-  usable_item_list = []
-  for item in items.usable_items(location):
-    usable_item_list.append( { item: item.capitalize()  } )
-    #usable_item_list.append( {"label": (str(item)).capitalize(), "field": item } )
+

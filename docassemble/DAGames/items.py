@@ -26,7 +26,7 @@ class ItemList(DAList):
   
   def usable_items(self, location):
     usable_things = []
-    usable_things = self.inventory() + self.visible_items(location)
+    usable_things = self.visible_items(location) + self.inventory()
     return usable_things
 
   def get_description(self, thing):
@@ -35,10 +35,39 @@ class ItemList(DAList):
         return item.desc
     return "Something's wrong..."
   
-  def list_as_fields(self, location):
+  def list_inventory_as_fields(self, location):
+    things_in_fields = list()
+    for item in self.inventory():
+      things_in_fields.append( { item: item.capitalize() } )
+    things_in_fields.append( { "cancel": "Nevermind. I don't want to do this." } )
+    return things_in_fields
+
+  def list_visible_as_fields(self, location):
+    things_in_fields = list()
+    for item in self.visible_items(location):
+      things_in_fields.append( { item: item.capitalize() } )
+    things_in_fields.append( { "cancel": "Nevermind. I don't want to do this." } )
+    return things_in_fields
+
+  def list_usable_as_fields(self, location):
     things_in_fields = list()
     for item in self.usable_items(location):
       things_in_fields.append( { item: item.capitalize() } )
+    things_in_fields.append( { "cancel": "Nevermind. I don't want to do this." } )
     return things_in_fields
 
-  
+  def is_moveable(self, thing):
+    for item in self:
+      if item.name.text == thing:
+        if item.moveable:
+          return True
+        else:
+          return False
+    return
+
+  def add_to_inventory(self, thing):
+    for item in self:
+      if item.name.text == thing:
+        item.room = 999
+        return
+    return
