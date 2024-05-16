@@ -35,7 +35,7 @@ class ItemList(DAList):
         return item.desc
     return "Something's wrong..."
   
-  def list_inventory_as_fields(self, location):
+  def list_inventory_as_fields(self):
     things_in_fields = list()
     for item in self.inventory():
       things_in_fields.append( { item: item.capitalize() } )
@@ -69,5 +69,12 @@ class ItemList(DAList):
     for item in self:
       if item.name.text == thing:
         item.room = 999
+        return
+    return
+  
+  def remove_from_inventory(self, location, thing):
+    for item in self:
+      if item.name.text == thing:
+        item.room = location
         return
     return

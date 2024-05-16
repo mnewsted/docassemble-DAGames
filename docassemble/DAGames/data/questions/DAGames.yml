@@ -30,7 +30,7 @@ code: |
   while location != 999:
     results
     # when finished put this undefine into a function maybe reset_command
-    undefine('input_string', 'command', 'target', 'results', 'pick_item_to_examine', 'item_to_examine', 'examine_item', 'item_not_visible', 'pick_item_to_take', 'item_to_take', 'take_item', 'item_not_takeable' )
+    undefine('input_string', 'command', 'target', 'results', 'pick_item_to_examine', 'item_to_examine', 'examine_item', 'item_not_visible', 'pick_item_to_take', 'item_to_take', 'take_item', 'item_not_takeable', 'pick_item_to_drop', 'item_to_drop', 'drop_item', 'item_not_droppable', 'no_exit', 'debug_screen' )
   end_screen
 ---
 sets: results
@@ -51,9 +51,7 @@ code: |
     if target in items.usable_items(location):
       examine_item
     else:
-      if target == "cancel":
-        pass
-      else:
+      if target != "cancel":
         item_not_visible
     
   # take
@@ -61,17 +59,27 @@ code: |
     if target == '':
       pick_item_to_take
       target = item_to_take
-    if target in items.usable_items(location):
+    if target in items.visible_items(location):
       if items.is_moveable(target):
         items.add_to_inventory(target)
         take_item
       else:
         item_not_takeable
-    else:
-      if target == "cancel":
-        pass
-      else:
+    else:    
+      if target != "cancel":
         item_not_visible
+
+  # drop
+  if command == "drop":
+    if target == '':
+      pick_item_to_drop
+      target = item_to_drop
+    if target in items.inventory():
+      items.remove_from_inventory(location, target)
+      drop_item
+    else:
+      if target != "cancel":
+        item_not_droppable
       
   # move
   if command in valid_moves:
@@ -81,7 +89,7 @@ code: |
       location = new_location
     else:
       no_exit
-      undefine('no_exit')
+      #undefine('no_exit')
         
   results = True
   
@@ -89,7 +97,7 @@ code: |
 code: |
   valid_moves = [ 'north', 'n', 'south', 's', 'east', 'e', 'west', 'w', 'up', 'u', 'down', 'd', 'northwest', 'nw', 'northeast', 'ne', 'southwest', 'sw', 'southeast', 'se' ]
 
-  valid_commands = valid_moves + [ 'examine', 'x', 'take', 't', 'exit' ]
+  valid_commands = valid_moves + [ 'examine', 'x', 'take', 't', 'drop', 'exit' ]
 ---
 id: start
 continue button field: start_screen
@@ -215,6 +223,31 @@ fields:
   - no label: item_to_take
     input type: radio
     code: items.list_visible_as_fields(location)
+---
+id: which item to drop
+continue button field: pick_item_to_drop
+question: |
+  What do you want to drop?
+subquestion: |
+  You can drop things you are carrying.
+fields:
+  - no label: item_to_drop
+    input type: radio
+    code: items.list_inventory_as_fields()
+---
+id: drop item
+continue button field: drop_item
+question: |
+  Drop ${ target }
+subquestion: |
+  You drop the ${ target }.
+---
+id: item not droppable
+continue button field: item_not_droppable
+question: |
+  Can't drop
+subquestion: |
+  You can't drop ${ target }.
 ---
 id: debug
 continue button field: debug_screen
