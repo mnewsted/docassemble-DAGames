@@ -65,16 +65,16 @@ class ItemList(DAList):
           return False
     return
 
-  def add_to_inventory(self, thing):
+  def add_to_inventory(self, location, thing):
     for item in self:
-      if item.name.text == thing:
+      if item.name.text == thing and item.room == location and item.moveable == True:
         item.room = 999
         return
     return
   
   def remove_from_inventory(self, location, thing):
     for item in self:
-      if item.name.text == thing:
+      if item.name.text == thing and item.room == 999:
         item.room = location
         return
     return
