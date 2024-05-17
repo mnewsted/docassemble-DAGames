@@ -5,17 +5,19 @@ code: |
   items[0].desc = "A massive rock makes moving through the cave difficult."
   items[0].room = 0
   items[0].moveable = False
+  items[0].hidden = False
 
   items[1].name.text = "seashell"
-  items[1].desc = "This milky-toned object somehow endured the elements."
+  items[1].desc = "It's got that classic seashell shape. This milky-toned object somehow endured the elements."
   items[1].room = 1
   items[1].moveable = True
+  items[1].hidden = False
   
   items[2].name.text = "rabbit's foot"
   items[2].desc = "This severed appendage has been dried and dyed deep blue. Lucky for you, not so for the rabbit."
   items[2].room = 999
   items[2].moveable = True
-  
+  items[2].hidden = False
   
   items.gathered = True
 ---

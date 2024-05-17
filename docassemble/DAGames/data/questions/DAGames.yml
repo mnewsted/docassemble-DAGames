@@ -212,7 +212,7 @@ continue button field: item_not_takeable
 question: |
   Can't take
 subquestion: |
-  You can't take ${ indefinite_article(target) }.
+  You can't take the ${ target }.
 ---
 id: which item to take
 continue button field: pick_item_to_take
@@ -248,7 +248,7 @@ continue button field: item_not_droppable
 question: |
   Can't drop
 subquestion: |
-  You can't drop ${ indefinite_article(target) }.
+  You can't drop the ${ target }.
 ---
 id: debug 1
 continue button field: debug_screen_1
