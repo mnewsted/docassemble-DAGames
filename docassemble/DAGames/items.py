@@ -13,14 +13,14 @@ class ItemList(DAList):
   def visible_items(self, location):
     visible_things = []
     for item in self:
-      if item.room == location:
+      if item.room == location and item.hidden == False:
         visible_things.append(item.name.text)
     return visible_things
   
   def inventory(self):
     held_things = []
     for item in self:
-      if item.room == 999:
+      if item.room == 999 and item.hidden == False:
         held_things.append(item.name.text)
     return held_things
   
@@ -31,7 +31,7 @@ class ItemList(DAList):
 
   def get_description(self, thing):
     for item in self:
-      if item.name.text == thing:
+      if item.name.text == thing and item.hidden == False:
         return item.desc
     return "Something's wrong..."
   
@@ -58,7 +58,7 @@ class ItemList(DAList):
 
   def is_moveable(self, thing):
     for item in self:
-      if item.name.text == thing:
+      if item.name.text == thing and item.hidden == False:
         if item.moveable:
           return True
         else:
@@ -67,14 +67,27 @@ class ItemList(DAList):
 
   def add_to_inventory(self, location, thing):
     for item in self:
-      if item.name.text == thing and item.room == location and item.moveable == True:
+      if item.name.text == thing and item.room == location and item.moveable == True and item.hidden == False:
         item.room = 999
         return
     return
   
   def remove_from_inventory(self, location, thing):
     for item in self:
-      if item.name.text == thing and item.room == 999:
+      if item.name.text == thing and item.room == 999 and item.hidden == False:
         item.room = location
         return
     return
+
+  def use_item(self, location, thing):
+    for item in self:
+      if item.name.text == thing:
+        if item.first_use == "":
+          return "Nothing happens. Maybe try using it somewhere else or near another item?"
+        elif item.num_uses == 0:
+          item.num_uses += 1
+          return item.first_use
+        else:
+          item.num_uses += 1
+          return item.next_use
+    return "Something's wrong..."

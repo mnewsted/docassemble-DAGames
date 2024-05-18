@@ -6,18 +6,27 @@ code: |
   items[0].room = 0
   items[0].moveable = False
   items[0].hidden = False
+  items[0].num_uses = 0
+  items[0].first_use = ""
+  items[0].next_use = ""
 
   items[1].name.text = "seashell"
   items[1].desc = "It's got that classic seashell shape. This milky-toned object somehow endured the elements."
   items[1].room = 1
   items[1].moveable = True
   items[1].hidden = False
+  items[1].num_uses = 0
+  items[1].first_use = "You hold the seashell...up to the heavens? Wave it around? Not sure what you're trying to accomplish."
+  items[1].next_use = "The seashell doesn't do anything. Some things are just for decoration."
   
   items[2].name.text = "rabbit's foot"
   items[2].desc = "This severed appendage has been dried and dyed deep blue. Lucky for you, not so for the rabbit."
   items[2].room = 999
   items[2].moveable = True
   items[2].hidden = False
+  items[2].num_uses = 0
+  items[2].first_use = "You rub the rabbit's foot, slowly at first then more vigorously. **Luck +100**."
+  items[2].next_use = "Keep rubbing. Your luck is sure to turn around."
   
   items.gathered = True
 ---

@@ -29,7 +29,7 @@ code: |
   while location != 999:
     results
     # when finished put this undefine into a function maybe reset_command
-    undefine('input_string', 'command', 'target', 'results', 'pick_item_to_examine', 'item_to_examine', 'examine_item', 'item_not_visible', 'pick_item_to_take', 'item_to_take', 'take_item', 'item_not_takeable', 'pick_item_to_drop', 'item_to_drop', 'drop_item', 'item_not_droppable', 'no_exit', 'debug_screen' )
+    undefine('input_string', 'command', 'target', 'results', 'pick_item_to_examine', 'item_to_examine', 'examine_item', 'item_not_visible', 'pick_item_to_take', 'item_to_take', 'take_item', 'item_not_takeable', 'pick_item_to_drop', 'item_to_drop', 'drop_item', 'item_not_droppable', 'pick_item_to_use', 'item_to_use', 'use_item', 'no_exit', 'debug_screen' )
   end_screen
 ---
 code: |
@@ -87,14 +87,25 @@ code: |
       location = new_location
     else:
       no_exit
-        
+
+  # use
+  if command == "use":
+    if target == '':
+      pick_item_to_use
+      target = item_to_use
+    if target in items.usable_items(location):
+      use_item
+    else:
+      if target != "cancel":
+        item_not_visible
+
   results = True
   
 ---
 code: |
   valid_moves = [ 'north', 'n', 'south', 's', 'east', 'e', 'west', 'w', 'up', 'u', 'down', 'd', 'northwest', 'nw', 'northeast', 'ne', 'southwest', 'sw', 'southeast', 'se' ]
 
-  valid_commands = valid_moves + [ 'examine', 'x', 'take', 't', 'drop', 'quit' ]
+  valid_commands = valid_moves + [ 'examine', 'x', 'take', 't', 'drop', 'use', 'quit' ]
 ---
 id: start
 continue button field: start_screen
@@ -155,16 +166,6 @@ subject: |
   **List of valid commands**
 content: |
   Valid commands: ${ comma_list(valid_commands) }
----
-template: inventory_help
-subject: |
-  **Inventory**
-content: |
-  % if len(items.inventory()) == 0:
-    You got nothing.
-  % else:
-    You are carrying: ${ comma_and_list(items.inventory()) }
-  % endif
 ---
 id: invalid move
 continue button field: no_exit
@@ -250,20 +251,29 @@ question: |
 subquestion: |
   You can't drop the ${ target }.
 ---
-id: debug 1
-continue button field: debug_screen_1
+id: use item
+continue button field: use_item
 question: |
-  Debug 1
+  Use ${ target }
 subquestion: |
-  target: ${ target}
-  
-  drop_item: ${ drop_item }
+  ${ items.use_item(location, target) }
 ---
-id: debug 2
-continue button field: debug_screen_2
+id: which item to use
+continue button field: pick_item_to_use
 question: |
-  Debug 2
+  What do you want to use?
 subquestion: |
-  target: ${ target}
-  
-  drop_item: ${ drop_item }
+  You can use things you can see or things you are carrying.
+fields:
+  - no label: item_to_use
+    input type: radio
+    code: items.list_usable_as_fields(location)
+
+
+---
+id: debug
+continue button field: debug_screen
+question: |
+  Debug
+subquestion: |
+  Add debug fields here
