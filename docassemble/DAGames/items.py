@@ -79,7 +79,7 @@ class ItemList(DAList):
         return
     return
 
-  def use_item(self, location, thing):
+  def use_item_text(self, location, thing):
     for item in self:
       if item.name.text == thing:
         if item.first_use == "":

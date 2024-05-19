@@ -93,12 +93,21 @@ code: |
     if target == '':
       pick_item_to_use
       target = item_to_use
-    if target in items.usable_items(location):
-      use_item
-    else:
-      if target != "cancel":
-        item_not_visible
-
+    event_text, effect_index = events.event_check(location, target) # this gets event text and index
+    if event_text == "pass": # no event associated with this item and location
+      if target in items.usable_items(location):
+        use_item
+      else:
+        if target != "cancel":
+          item_not_visible
+    else: # event associated with itema and location
+      if event_index == 999: # event already occurred
+        pass # event already done, go on to display already_done text
+      else: # do event
+        effect[effect_index] # this will run a code block that does the things in the event
+      show_event # display results of event including already done
+      
+      
   results = True
   
 ---
@@ -256,7 +265,7 @@ continue button field: use_item
 question: |
   Use ${ target }
 subquestion: |
-  ${ items.use_item(location, target) }
+  ${ items.use_item_text(location, target) }
 ---
 id: which item to use
 continue button field: pick_item_to_use
