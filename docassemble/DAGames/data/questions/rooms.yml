@@ -13,8 +13,14 @@ code: |
 
   rooms[1].name = "The beach"
   rooms[1].desc = "You're on a sandy beach. The sun reflects off the gentle waves. To the south is an entrance to a cave. To the east is sweet freedom."
-  rooms[1].exits = { "s": 0, "e": 999 }
+  rooms[1].exits = { "s": 0, "e": 2 }
   rooms[1].hidden = False
-  
+
+  rooms[2].name = "Freedom's edge"
+  rooms[2].desc = "The shore is lined with jagged stones. Seafoam slips through the openings. A grassy patch on the eastern edge of this beach has what appears to be a door. To the west is the beach. To the east is sweet freedom."
+  rooms[2].exits = { "w": 1, "e": 999 }
+  rooms[2].hidden = False
+
+
   rooms.gathered = True
 ---

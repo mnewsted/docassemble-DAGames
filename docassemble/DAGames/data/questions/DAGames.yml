@@ -12,16 +12,19 @@ features:
 include:
   - rooms.yml
   - items.yml
+  - events.yml
 ---
 modules:
   - .base
   - .rooms
   - .items
+  - .events
   - docassemble.ALToolbox.misc
 ---
 objects:
   rooms: RoomList
   items: ItemList
+  events: EventList
 ---
 mandatory: True
 code: |
@@ -29,7 +32,7 @@ code: |
   while location != 999:
     results
     # when finished put this undefine into a function maybe reset_command
-    undefine('input_string', 'command', 'target', 'results', 'pick_item_to_examine', 'item_to_examine', 'examine_item', 'item_not_visible', 'pick_item_to_take', 'item_to_take', 'take_item', 'item_not_takeable', 'pick_item_to_drop', 'item_to_drop', 'drop_item', 'item_not_droppable', 'pick_item_to_use', 'item_to_use', 'use_item', 'no_exit', 'debug_screen' )
+    undefine('input_string', 'command', 'target', 'results', 'pick_item_to_examine', 'item_to_examine', 'examine_item', 'item_not_visible', 'pick_item_to_take', 'item_to_take', 'take_item', 'item_not_takeable', 'pick_item_to_drop', 'item_to_drop', 'drop_item', 'item_not_droppable', 'pick_item_to_use', 'item_to_use', 'use_item', 'show_event', 'event_text', 'event_index', 'no_exit', 'debug_screen' )
   end_screen
 ---
 code: |
@@ -100,11 +103,9 @@ code: |
       else:
         if target != "cancel":
           item_not_visible
-    else: # event associated with itema and location
-      if event_index == 999: # event already occurred
-        pass # event already done, go on to display already_done text
-      else: # do event
-        effect[effect_index] # this will run a code block that does the things in the event
+    else: # event associated with item and location
+      if events[effect_index].done == False: # event already occurred
+        events[effect_index].run # this will run a code block that does the things in the event
       show_event # display results of event including already done
       
       
@@ -277,6 +278,20 @@ fields:
   - no label: item_to_use
     input type: radio
     code: items.list_usable_as_fields(location)
+---
+id: show event
+continue button field: show_event
+question: |
+  Use ${ target }
+subquestion: |
+  ${ event_text }
+---
+# add code for using plastic egg
+code: |
+  events[0].done = True
+  events[0].run = True
+
+
 
 
 ---

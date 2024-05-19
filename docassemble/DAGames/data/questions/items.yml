@@ -27,6 +27,25 @@ code: |
   items[2].num_uses = 0
   items[2].first_use = "You rub the rabbit's foot, slowly at first then more vigorously. **Luck +100**."
   items[2].next_use = "Keep rubbing. Your luck is sure to turn around."
+
+  items[3].name.text = "plastic egg"
+  items[3].desc = "The purple egg looks like a toy. The plastic seems thin, and it feels like something is inside it."
+  items[3].room = 2
+  items[3].moveable = True
+  items[3].hidden = False
+  items[3].num_uses = 0
+  items[3].first_use = "This text should not be visible."
+  items[3].next_use = "This text should also not be visible."
+  
+  items[4].name.text = "key"
+  items[4].desc = "The purple egg looks like a toy. The plastic seems thin, and it feels like something is inside it."
+  items[4].room = 999
+  items[4].moveable = True
+  items[4].hidden = True
+  items[4].num_uses = 0
+  items[4].first_use = "It is bronze and the teeth are scratched. It looks like it has been used quite a bit."
+  items[4].next_use = "This key has to go somewhere."
+  
   
   items.gathered = True
 ---

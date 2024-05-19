@@ -1,0 +1,14 @@
+---
+mandatory: True
+code: |
+  events[0].name.text = "The delicate egg cracks and the shell falls apart like confetti. A key falls to the ground."
+  events[0].already_done_text = "The egg is destroyed."
+  events[0].location = 999
+  events[0].trigger_item = "plastic egg"
+  events[0].done = False
+  events[0].effect_index = 0
+  events[0].run = None
+  
+  
+  events.gathered = True
+---
